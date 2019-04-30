@@ -1,7 +1,14 @@
 <?php
-require_once('src/app/views/IndexView.php');
+if(isset($_GET['page'])){
+    switch($_GET['page']){
+        case "login":
+            echo "Login";
+        break;
 
-use src\app\views\IndexView;
-
-$render = new IndexView("Internet Banking | Acessar/Registrar");
-echo $render->generateView();
+        default:
+            echo "404";
+        break;
+    }
+}else{
+    echo "Home";
+}
