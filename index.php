@@ -1,14 +1,6 @@
 <?php
-if(isset($_GET['page'])){
-    switch($_GET['page']){
-        case "login":
-            echo "Login";
-        break;
+require_once('src/app/controllers/ViewsController.php');
+use \src\app\controllers\ViewsController;
 
-        default:
-            echo "404";
-        break;
-    }
-}else{
-    echo "Home";
-}
+$page = isset($_GET['page']) ? $_GET['page'] : '';
+new ViewsController($page);

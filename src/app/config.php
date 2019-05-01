@@ -30,3 +30,9 @@ define('SYS_DB_USER_PASSWORD', '');
  * Padrão: ib-basic
  */
 define('SYS_DB_NAME', 'ib-basic');
+
+/**
+ * Insira aqui o título padrão da aplicação
+ * Padrão: Internet Banking Basic
+ */
+define('SYS_PAGES_PREFIX', 'Internet Banking Basic');

@@ -1,12 +1,14 @@
 <?php
 namespace src\app\views;
 
-require_once('src/app/helpers/PrepareEnvironment.php');
+require_once('src/app/config.php');
 
 abstract class View {
 
-	protected $pageName;
-	protected $bodyContent;
+	protected $pageTitle;
+	protected $viewContent;
+	protected $viewMessages = array();
+	private const acceptableMessageTypes = array('error', 'info', 'warning', 'success');
 
 	/**
 	 * Gera o Header padrão da aplicação
@@ -21,12 +23,9 @@ abstract class View {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<meta http-equiv="X-UA-Compatible" content="ie=edge">
 			<meta name="author" content="Luan Novais">
-			<title>'. $this->pageName .'</title>
-			<link rel="stylesheet" href="src/assets/css/bootstrap-reboot.min.css">
-			<link rel="stylesheet" href="src/assets/css/bootstrap-grid.min.css">
-			<link rel="stylesheet" href="src/assets/css/bootstrap.min.css">
+			<title>'.SYS_PAGES_PREFIX.' | '.$this->pageTitle.'</title>
 		</head>
-		<body class="bg-secondary">';
+		<body>';
 	}
 
 	/**
@@ -44,10 +43,40 @@ abstract class View {
 	 *
 	 * @return void
 	 */
-	abstract protected function body();
+	protected function body(){
+		$bodyContent = '';
 
-	public function setContentInBody($content){
-		$this->bodyContent .= $content;
+		if(!empty($this->viewMessages)){
+			$bodyContent .= $this->getViewMessages();
+		}
+		$bodyContent .= $this->viewContent;
+
+		return $bodyContent;
+	}
+
+	public function setViewMessage($messageContent, $messageType = 'error'){
+		if(in_array($messageType, self::acceptableMessageTypes)){			
+			$this->viewMessages[$messageType][] = $messageContent;
+		}
+	}
+
+	private function getViewMessages(){
+		$messages = '';
+
+		if(!empty('error')){
+			$messages .= '<div style="color: red;">'.join('<br>', $this->viewMessages['error']).'</div>';
+		}
+		if(!empty('info')){
+			$messages .= '<div style="color: blue;">'.join('<br>', $this->viewMessages['info']).'</div>';
+		}
+		if(!empty('warning')){
+			$messages .= '<div style="color: orange;">'.join('<br>', $this->viewMessages['warning']).'</div>';
+		}
+		if(!empty('success')){
+			$messages .= '<div style="color: green;">'.join('<br>', $this->viewMessages['success']).'</div>';
+		}
+		
+		return $messages;
 	}
 
 	/**

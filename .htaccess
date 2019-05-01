@@ -5,6 +5,6 @@ RewriteBase /internet-banking-basic/
 RewriteRule ^index\.php$ - [L] 
 RewriteCond %{REQUEST_FILENAME} !-f 
 RewriteCond %{REQUEST_FILENAME} !-d 
-RewriteRule ^([A-z0-9-]+)$ /internet-banking-basic/index.php?page=$1 [L] 
+RewriteRule ^([A-z0-9]+)$ /internet-banking-basic/index.php?page=$1 [L] 
 </IfModule> 
 #SYS END
