@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Internet Banking Basic</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>    
+    <header class="ibb-header">
+        <nav class="navbar navbar-expand navbar-dark bg-dark justify-content-between">
+            <a href="#" class="navbar-brand ml-2">
+                <img src="assets/images/logo_white.png" width="85px" class="d-inline-block align-top img-fluid" alt="LuanDEV Logo">
+            </a>
+            
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-exchange-alt"></i> Transferir</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-hand-holding-usd"></i> Retirar</a>
+                </li>   
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><i class="fas fa-coins"></i> Depositar</a>
+                </li>   
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-receipt"></i> Histórico de Ações</a>
+                </li>       
+            </ul>
+            
+            <ul class="navbar-nav">   
+                <li class="nav-item">
+                    <p class="navbar-text mb-0 mr-3"><span class="badge badge-success">R$ 1500</span></p>
+                </li>  
+                <li class="nav-item">
+                    <p class="navbar-text text-light mb-0 mr-4"><span class="badge badge-info"><i class="fas fa-user-circle"></i> Nome do Usuário</span></p>
+                </li>                  
+                <li class="nav-item">
+                    <a class="btn btn-danger mr-2" href="#">Encerrar sessão</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="row my-5">
+                <div class="col-8 mx-auto shadow-lg rounded p-4">
+                    <h4 class="text-center text-uppercase text-dark"><i class="fas fa-coins"></i> Depósito</h4>
+                    <form method="POST">
+                        <div class="form-group shadow-sm rounded p-2">
+                            <input autocomplete="off" required type="number" class="form-control mt-2" id="formDeposit_value" name="formDeposit_value" placeholder="Valor a ser depositado">
+                        </div>
+                        <div class="form-group shadow-sm rounded p-2">
+                            <p class="text-info"><b>Confirme a senha da sua conta para concluir a operação</b></p>
+                            <input autocomplete="off" required minlength="6" maxlength="6" type="password" class="form-control mt-2 border-info text-info" id="formDeposit_pw" name="formDeposit_pw" placeholder="Senha da sua conta">
+                        </div>
+                        <button type="submit" class="btn btn-success float-right">Concluir <i class="fas fa-check"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="bg-dark py-2">
+        <div class="container">
+            <p class="text-center text-light mb-0">Todos direitos reservados 2019 &copy; LuanDEV.</p>
+        </div>
+    </footer>
+    
+    <!-- build:js -->
+    <script src="./assets/scripts/bundle.min.js"></script>
+    <!-- endbuild -->
+</body>
+</html>

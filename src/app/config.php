@@ -8,6 +8,12 @@
 define('SYS_DEFAULT_PATH', 'internet-banking-basic');
 
 /**
+ * Insira aqui a URL padrão do projeto
+ * Padrão: http://localhost/internet-banking-basic
+ */
+define('SYS_DEFAULT_URI', 'http://localhost/internet-banking-basic');
+
+/**
  * Insira aqui nome do host do banco de dados
  * Padrão: localhost
  */

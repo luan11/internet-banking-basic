@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Sao_Paulo');
+
 require_once('src/app/controllers/ViewsController.php');
 use \src\app\controllers\ViewsController;
 
