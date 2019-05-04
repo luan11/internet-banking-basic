@@ -7,12 +7,22 @@ class Login extends User {
 
     public function __construct($formValidator, $userAccount, $userPassword){
         if(\src\app\helpers\Forms::validateInputValidator($formValidator)){
-            if(!empty($userAccount) && !empty($userPassword)){
-                if(strlen($userAccount) === 10 && strlen($userPassword) === 6){
-                    $this->userAccount = $userAccount;
-                    $this->userPassword = $userPassword;
+            if(!empty(filter_var($userAccount, FILTER_SANITIZE_STRING)) && 
+            !empty(filter_var($userPassword, FILTER_SANITIZE_STRING))){
+                if(strlen(filter_var($userAccount, FILTER_SANITIZE_STRING)) === 10 && 
+                strlen(filter_var($userPassword, FILTER_SANITIZE_STRING)) === 6){
+                    $this->userAccount = filter_var($userAccount, FILTER_SANITIZE_STRING);
+                    $this->userPassword = filter_var($userPassword, FILTER_SANITIZE_STRING);
 
-                    var_dump($this);
+                    $login = $this->dbLogin($this);
+                    if(!empty($login)){
+                        if(session_status() === PHP_SESSION_NONE){
+                            session_start();
+                        }
+                        $_SESSION['userLogged'] = $login;
+                    }else{
+                        $this->setError("Número de conta e/ou senha incorretos!");
+                    }
                 }else{
                     $this->setError("Parece que os campos digitados estão fora dos padrões, tente novamente!");
                 }

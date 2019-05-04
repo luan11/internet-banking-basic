@@ -7,7 +7,12 @@ class Register extends User {
 
     public function __construct($formValidator, $userFirstName, $userLastName, $userEmail, $userAccount, $userPassword, $userPasswordConfirm){
         if(\src\app\helpers\Forms::validateInputValidator($formValidator)){
-            if(!empty($userFirstName) && !empty($userLastName) && !empty($userEmail) && !empty($userAccount) && !empty($userPassword) && !empty($userPasswordConfirm)){
+            if(!empty(filter_var($userFirstName, FILTER_SANITIZE_STRING)) && 
+            !empty(filter_var($userLastName, FILTER_SANITIZE_STRING)) && 
+            !empty(filter_var($userEmail, FILTER_SANITIZE_EMAIL)) && 
+            !empty(substr(filter_var($userAccount, FILTER_SANITIZE_STRING), 0, 10)) && 
+            !empty(filter_var($userPassword, FILTER_SANITIZE_STRING)) && 
+            !empty(filter_var($userPassword, FILTER_SANITIZE_STRING))){
                 $this->userFirstName = filter_var($userFirstName, FILTER_SANITIZE_STRING);
                 $this->userLastName = filter_var($userLastName, FILTER_SANITIZE_STRING);
                 $this->userEmail = filter_var($userEmail, FILTER_SANITIZE_EMAIL);
@@ -15,8 +20,11 @@ class Register extends User {
                 $this->confirmPasswords($userPassword, $userPasswordConfirm);
 
                 if(empty($this->getErrors())){
-                    $this->setSuccess('Sua conta foi criada com sucesso, utilize o seu número de conta <span class="badge badge-success">'.$this->userAccount.'</span> para realizar o login.');
-                    var_dump($this);
+                    if($this->dbRegister($this)){
+                        $this->setSuccess('Sua conta foi criada com sucesso, utilize o seu número de conta <span class="badge badge-success">'.$this->userAccount.'</span> para realizar o login.');
+                    }else{
+                        $this->setError('Não foi possível finalizar o cadastro, tente novamente!');
+                    }
                 }
             }else{
                 $this->setError("É obrigatório o preenchimento de todos os campos!");
