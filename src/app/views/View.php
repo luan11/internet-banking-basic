@@ -13,6 +13,9 @@ abstract class View {
 	/**
 	 * Gera o Header padrão da aplicação
 	 *
+	 * @param string $headerType
+	 * @param string $loggedUserName
+	 * @param string $loggedUserBalance
 	 * @return void
 	 */
 	protected function header($headerType, $loggedUserName, $loggedUserBalance){
@@ -56,12 +59,24 @@ abstract class View {
 		return $bodyContent;
 	}
 
+	/**
+	 * Insere uma mensagem na view
+	 *
+	 * @param string $messageContent
+	 * @param string $messageType
+	 * @return void
+	 */
 	public function setViewMessage($messageContent, $messageType = 'error'){
 		if(in_array($messageType, self::acceptableMessageTypes)){			
 			$this->viewMessages[$messageType][] = $messageContent;
 		}
 	}
 
+	/**
+	 * Pega as mensagens inseridas na view
+	 *
+	 * @return void
+	 */
 	private function getViewMessages(){
 		$messages = '<div class="container mt-4">';
 
@@ -86,6 +101,9 @@ abstract class View {
 	/**
 	 * Junta o Header, o Body e o Footer e retorna a visualização completa da aplicação
 	 *
+	 * @param string $headerType
+	 * @param string $loggedUserName
+	 * @param string $loggedUserBalance
 	 * @return void
 	 */
 	public function generateView($headerType = 'not-logged', $loggedUserName = '', $loggedUserBalance = ''){

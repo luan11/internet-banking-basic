@@ -9,6 +9,12 @@ abstract class Database{
 	private const dbUser = SYS_DB_USER;
 	private const dbUserPassword = SYS_DB_USER_PASSWORD;
 
+	/**
+	 * Valida se o usuário logado no sistema é veradeiro
+	 *
+	 * @param int $loggedUserId
+	 * @return void
+	 */
 	public static function validateLoggedUser($loggedUserId){
 		try{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
@@ -28,6 +34,13 @@ abstract class Database{
 		return $return;
 	}
 
+	/**
+	 * Valida e realiza o login do usuário no sistema
+	 *
+	 * @param int $userAccount
+	 * @param string $userPassword
+	 * @return void
+	 */
 	public static function userLogin($userAccount, $userPassword){
 		try{
 			$return = false;
@@ -54,6 +67,16 @@ abstract class Database{
 		return $return;
 	}
 
+	/**
+	 * Faz o registro de um novo usuário no sistema
+	 *
+	 * @param string $userFirstName
+	 * @param string $userLastName
+	 * @param string $userEmail
+	 * @param string $userAccount
+	 * @param string $userPassword
+	 * @return void
+	 */
 	public static function userRegister($userFirstName, $userLastName, $userEmail, $userAccount, $userPassword){
 		try{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
@@ -77,6 +100,12 @@ abstract class Database{
 		return $return;
 	}
 
+	/**
+	 * Pega os históricos de transação do usuário logado
+	 *
+	 * @param int $userId
+	 * @return void
+	 */
 	public static function getTransactsHistory($userId){
 		try{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
@@ -96,6 +125,13 @@ abstract class Database{
 		return $return;
 	}
 
+	/**
+	 * Valida a senha do usuário logado no ato de uma transação
+	 *
+	 * @param int $userId
+	 * @param string $userPassword
+	 * @return void
+	 */
 	public static function validateLoggedPassword($userId, $userPassword){
 		try{
 			$return = false;
@@ -125,6 +161,12 @@ abstract class Database{
 		return $return;
 	}
 
+	/**
+	 * Valida se a conta que vai receber uma transferência é valida
+	 *
+	 * @param string $accountNumber
+	 * @return void
+	 */
 	public static function validateAccountReceiver($accountNumber){
 		try{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
@@ -144,6 +186,13 @@ abstract class Database{
 		return $return;
 	}
 
+	/**
+	 * Realiza uma transação (Retirada ou Depósito)
+	 *
+	 * @param int $userId
+	 * @param float $value
+	 * @return void
+	 */
 	public static function doTransact($userId, $value){
 		try{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
@@ -164,6 +213,15 @@ abstract class Database{
 		return $return;
 	}
 
+	/**
+	 * Salva a transação realizada no histórico
+	 *
+	 * @param string $action
+	 * @param float $value
+	 * @param string $ip
+	 * @param int $userId
+	 * @return void
+	 */
 	public static function saveTransactHistory($action, $value, $ip, $userId){
 		try{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);

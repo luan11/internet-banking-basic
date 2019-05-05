@@ -25,6 +25,13 @@ class AccountTransactions extends User{
         }
     }
 
+    /**
+     * Metódo que realiza transferências entre contas
+     *
+     * @param AccountTransactions $transact
+     * @param string $accountReceiver
+     * @return void
+     */
     public function transfer(AccountTransactions $transact, $accountReceiver){
         $confirmSender = \src\app\services\Database::validateLoggedPassword($transact->transactConfirmId, $transact->transactConfirmPassword);
         if(!empty($confirmSender) && $confirmSender['account'] !== $accountReceiver){
@@ -63,6 +70,12 @@ class AccountTransactions extends User{
         }
     }
 
+    /**
+     * Metódo que realiza retirardas
+     *
+     * @param AccountTransactions $transact
+     * @return void
+     */
     public function withdraw(AccountTransactions $transact){
         $confirmRequester = \src\app\services\Database::validateLoggedPassword($transact->transactConfirmId, $transact->transactConfirmPassword);
         if(!empty($confirmRequester)){
@@ -86,6 +99,12 @@ class AccountTransactions extends User{
         }
     }
 
+    /**
+     * Método que realiza depósitos
+     *
+     * @param AccountTransactions $transact
+     * @return void
+     */
     public function deposit(AccountTransactions $transact){
         $confirmRequester = \src\app\services\Database::validateLoggedPassword($transact->transactConfirmId, $transact->transactConfirmPassword);
         if(!empty($confirmRequester)){
