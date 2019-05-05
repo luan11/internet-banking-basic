@@ -212,8 +212,9 @@ class ViewsController {
 			default:
 				$render = new \src\app\views\IndexView("Página não encontrada!");
 				$render->setViewMessage("<b>404</b><br>Página não encontrada =(", "warning");
-				if(\src\app\models\User::userIsLoggedIn()){
-					echo $render->generateView('logged', 'Luan', 'R$ 1500,00');
+				$userIsLogged = \src\app\models\User::userIsLoggedIn();
+				if(!empty($userIsLogged)){
+					echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
 				}else{					
 					echo $render->generateView();
 				}
