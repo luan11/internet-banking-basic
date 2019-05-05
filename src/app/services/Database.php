@@ -103,14 +103,17 @@ abstract class Database{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
 			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-			$validatePassword = $connection->prepare('SELECT balance_ibbUsers, password_ibbUsers FROM ibb_users WHERE id_ibbUsers = :userId');
+			$validatePassword = $connection->prepare('SELECT balance_ibbUsers, account_ibbUsers,password_ibbUsers FROM ibb_users WHERE id_ibbUsers = :userId');
 			$validatePassword->bindParam(':userId', $userId);
 			$validatePassword->execute();
 
 			$result = $validatePassword->fetch(\PDO::FETCH_OBJ);
 			if(!empty($result)){
 				if(password_verify($userPassword, $result->password_ibbUsers)){
-					$return = floatval($result->balance_ibbUsers);
+					$return = array(
+						'balance' => $result->balance_ibbUsers,
+						'account' => $result->account_ibbUsers
+					);
 				}
 			}
 		}catch(\PDOException $e){
@@ -123,17 +126,64 @@ abstract class Database{
 	}
 
 	public static function validateAccountReceiver($accountNumber){
-		
+		try{
+			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
+			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+			$validateReceiver = $connection->prepare('SELECT balance_ibbUsers, id_ibbUsers FROM ibb_users WHERE account_ibbUsers = :accountNumber');
+			$validateReceiver->bindParam(':accountNumber', $accountNumber);
+			$validateReceiver->execute();
+
+			$return = $validateReceiver->fetch(\PDO::FETCH_OBJ);
+		}catch(\PDOException $e){
+			$return = false;
+		}
+
+		$connection = null;
+
+		return $return;
 	}
 
-	public static function doTransfer(){}
+	public static function doTransact($userId, $value){
+		try{
+			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
+			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-	public static function doDeposit($userId, $value){
+			$transact = $connection->prepare('UPDATE ibb_users SET balance_ibbUsers = :balanceValue WHERE id_ibbUsers = :userId');
+			$transact->bindParam(':balanceValue', $value);
+			$transact->bindParam(':userId', $userId);
+			$transact->execute();
 
+			$return = true;
+		}catch(\PDOException $e){
+			$return = false;
+		}
+
+		$connection = null;
+
+		return $return;
 	}
 
-	public static function doWithdraw($userId, $value){
+	public static function saveTransactHistory($action, $value, $ip, $userId){
+		try{
+			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
+			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
+			$saveTransact = $connection->prepare('INSERT INTO ibb_transacts(action_ibbTransacts, value_ibbTransacts, ip_ibbTransacts, userId_ibbTransacts) VALUES (:transactAction, :transactValue, :transactIp, :transactUserId)');
+			$saveTransact->bindParam(':transactAction', $action);
+			$saveTransact->bindParam(':transactValue', $value);
+			$saveTransact->bindParam(':transactIp', $ip);
+			$saveTransact->bindParam(':transactUserId', $userId);
+			$saveTransact->execute();
+
+			$return = true;
+		}catch(\PDOException $e){
+			$return = false;
+		}
+
+		$connection = null;
+
+		return $return;
 	}
 
 }

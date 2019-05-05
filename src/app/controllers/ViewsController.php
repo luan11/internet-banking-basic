@@ -13,6 +13,7 @@ require_once('src/app/views/PanelHistoryView.php');
 require_once('src/app/models/User.php');
 require_once('src/app/models/RegisterUser.php');
 require_once('src/app/models/LoginUser.php');
+require_once('src/app/models/AccountTransactions.php');
 
 class ViewsController {
 
@@ -28,7 +29,6 @@ class ViewsController {
 				}else{					
 					echo $render->generateView();
 				}
-				var_dump(\src\app\services\Database::validateLoggedPassword(1, 'admin1'));
 			break;
 
 			case 'login':			
@@ -148,7 +148,23 @@ class ViewsController {
 					$render = new \src\app\views\PanelView("Transferir");
 	
 					if(isset($_POST['formTransfer_transfer'])){
-						var_dump($_POST);
+						$transact = new \src\app\models\AccountTransactions($_POST['formTransfer_transfer'], $_POST['formTransfer_value'], $_POST['formTransfer_pw']);
+
+						if(empty($transact->getErrors())){
+							$transact->transfer($transact, $_POST['formTransfer_account']);
+						}
+
+						if(!empty($transact->getErrors())){
+							for($i = 0; $i < count($transact->getErrors()); $i++){
+								$render->setViewMessage($transact->getErrors()[$i]);
+							}
+						}
+
+						if(!empty($transact->getSuccess())){
+							for($i = 0; $i < count($transact->getSuccess()); $i++){
+								$render->setViewMessage($transact->getSuccess()[$i], 'success');
+							}
+						}
 					}
 					
 					$userIsLogged = \src\app\models\User::userIsLoggedIn();
