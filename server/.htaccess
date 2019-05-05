@@ -1,0 +1,15 @@
+# HTID:9386058: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW 
+php_value display_errors 1 
+# DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:9386058: 
+#SYS START 
+<IfModule mod_rewrite.c> 
+RewriteEngine On 
+RewriteBase / 
+RewriteRule ^index\.php$ - [L] 
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule ^([A-z0-9]+)$ /index.php?page=$1 [L] 
+RewriteRule ^(painel\/)([A-z0-9]+)$ /index.php?page=painel&subpage=$2 [L] 
+ErrorDocument 404 /index.php?page=not-found 
+</IfModule> 
+#SYS END
