@@ -85,7 +85,23 @@ class ViewsController {
 							$render = new \src\app\views\PanelWithdrawView("Retirar");
 
 							if(isset($_POST['formWithdraw_withdraw'])){
-								var_dump($_POST);
+								$transact = new \src\app\models\AccountTransactions($_POST['formWithdraw_withdraw'], $_POST['formWithdraw_value'], $_POST['formWithdraw_pw']);
+		
+								if(empty($transact->getErrors())){
+									$transact->withdraw($transact);
+								}
+		
+								if(!empty($transact->getErrors())){
+									for($i = 0; $i < count($transact->getErrors()); $i++){
+										$render->setViewMessage($transact->getErrors()[$i]);
+									}
+								}
+		
+								if(!empty($transact->getSuccess())){
+									for($i = 0; $i < count($transact->getSuccess()); $i++){
+										$render->setViewMessage($transact->getSuccess()[$i], 'success');
+									}
+								}
 							}
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();
@@ -101,7 +117,23 @@ class ViewsController {
 							$render = new \src\app\views\PanelDepositView("Depositar");
 
 							if(isset($_POST['formDeposit_deposit'])){
-								var_dump($_POST);
+								$transact = new \src\app\models\AccountTransactions($_POST['formDeposit_deposit'], $_POST['formDeposit_value'], $_POST['formDeposit_pw']);
+		
+								if(empty($transact->getErrors())){
+									$transact->deposit($transact);
+								}
+		
+								if(!empty($transact->getErrors())){
+									for($i = 0; $i < count($transact->getErrors()); $i++){
+										$render->setViewMessage($transact->getErrors()[$i]);
+									}
+								}
+		
+								if(!empty($transact->getSuccess())){
+									for($i = 0; $i < count($transact->getSuccess()); $i++){
+										$render->setViewMessage($transact->getSuccess()[$i], 'success');
+									}
+								}
 							}
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();

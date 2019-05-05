@@ -21,7 +21,7 @@ abstract class PrepareEnvironment {
 	 */
 	private function generateHtaccessFile(){
 		$fileName = '.htaccess';
-		$fileContent = "#SYS START \n<IfModule mod_rewrite.c> \nRewriteEngine On \nRewriteBase /".SYS_DEFAULT_PATH."/ \nRewriteRule ^index\.php$ - [L] \nRewriteCond %{REQUEST_FILENAME} !-f \nRewriteCond %{REQUEST_FILENAME} !-d \nRewriteRule ^([A-z0-9]+)$ /".SYS_DEFAULT_PATH."/index.php?page=$1 [L] \nRewriteRule ^(painel\/)([A-z0-9]+)$ /".SYS_DEFAULT_PATH."/index.php?page=painel&subpage=$2 [L] \n</IfModule> \n#SYS END";
+		$fileContent = "#SYS START \n<IfModule mod_rewrite.c> \nRewriteEngine On \nRewriteBase /".SYS_DEFAULT_PATH."/ \nRewriteRule ^index\.php$ - [L] \nRewriteCond %{REQUEST_FILENAME} !-f \nRewriteCond %{REQUEST_FILENAME} !-d \nRewriteRule ^([A-z0-9]+)$ ".SYS_DEFAULT_PATH."/index.php?page=$1 [L] \nRewriteRule ^(painel\/)([A-z0-9]+)$ ".SYS_DEFAULT_PATH."/index.php?page=painel&subpage=$2 [L] \n</IfModule> \n#SYS END";
 		$fileSize = !empty(filesize($fileName)) ? filesize($fileName) : 1;
 		
 		$fileRead = fopen($fileName, 'r');

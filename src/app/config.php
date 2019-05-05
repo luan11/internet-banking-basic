@@ -5,7 +5,7 @@
  * Exemplo: localhost/este-e-o-caminho-padrao, você irá inserir apenas "este-e-o-caminho-padrao"
  * Padrão: internet-banking-basic
  */
-define('SYS_DEFAULT_PATH', 'internet-banking-basic');
+define('SYS_DEFAULT_PATH', '/internet-banking-basic');
 
 /**
  * Insira aqui a URL padrão do projeto

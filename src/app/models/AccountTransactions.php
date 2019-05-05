@@ -29,28 +29,28 @@ class AccountTransactions extends User{
         $confirmSender = \src\app\services\Database::validateLoggedPassword($transact->transactConfirmId, $transact->transactConfirmPassword);
         if(!empty($confirmSender) && $confirmSender['account'] !== $accountReceiver){
             if($transact->transactValue <= floatval($confirmSender['balance'])){
-                $senderNewBalance = floatval($confirmSender['balance']) - floatval($transact->transactValue);
+                $senderNewBalance = floatval($confirmSender['balance']) - $transact->transactValue;
                 
                 $confirmReceiver = \src\app\services\Database::validateAccountReceiver($accountReceiver);
                 if(!empty($confirmReceiver)){
                     $receiverNewBalance = floatval($confirmReceiver->balance_ibbUsers) + $transact->transactValue;
 
                     if(\src\app\services\Database::doTransact($transact->transactConfirmId, $senderNewBalance)){
-                        if(\src\app\services\Database::saveTransactHistory('Envio p/conta ['.$accountReceiver.']', '-'.$transact->transactValue, $transact->transactIp, $transact->transactConfirmId)){
+                        if(\src\app\services\Database::saveTransactHistory('Envio p/conta ['.$accountReceiver.']', -$transact->transactValue, $transact->transactIp, $transact->transactConfirmId)){
                             if(\src\app\services\Database::doTransact($confirmReceiver->id_ibbUsers, $receiverNewBalance)){
-                                if(\src\app\services\Database::saveTransactHistory('Recebimento da conta ['.$confirmSender['account'].']', '+'.$transact->transactValue, $transact->transactIp, $confirmReceiver->id_ibbUsers)){
+                                if(\src\app\services\Database::saveTransactHistory('Recebimento da conta ['.$confirmSender['account'].']', +$transact->transactValue, $transact->transactIp, $confirmReceiver->id_ibbUsers)){
                                     $transact->setSuccess("Transferência realizada com sucesso!");
                                 }else{
-                                    $transact->setError("Transação incompleta, entre em contato com o suporte!");
+                                    $transact->setError("[2] Erro ao documentar transação, porém foi efetuada com sucesso.");
                                 }
                             }else{
-                                $transact->setError("Transação incompleta, entre em contato com o suporte!");
+                                $transact->setError("[2] Erro ao iniciar a transação, tente novamente.");
                             }
                         }else{
-                            $transact->setError("Transação incompleta, entre em contato com o suporte!");
+                            $transact->setError("[1] Erro ao documentar transação, porém foi efetuada com sucesso.");
                         }
                     }else{
-                        $transact->setError("Transação incompleta, entre em contato com o suporte!");
+                        $transact->setError("[1] Erro ao iniciar a transação, tente novamente.");
                     }
                 }else{
                     $transact->setError("Conta do recebedor não encontrada!");
@@ -58,6 +58,48 @@ class AccountTransactions extends User{
             }else{
                 $transact->setError("Saldo não suficiente!");
             }
+        }else{
+            $transact->setError("Falha na autenticação!");
+        }
+    }
+
+    public function withdraw(AccountTransactions $transact){
+        $confirmRequester = \src\app\services\Database::validateLoggedPassword($transact->transactConfirmId, $transact->transactConfirmPassword);
+        if(!empty($confirmRequester)){
+            if($transact->transactValue <= floatval($confirmRequester['balance'])){
+                $senderNewBalance = floatval($confirmRequester['balance']) - $transact->transactValue;
+
+                if(\src\app\services\Database::doTransact($transact->transactConfirmId, $senderNewBalance)){
+                    if(\src\app\services\Database::saveTransactHistory('Retirada', -$transact->transactValue, $transact->transactIp, $transact->transactConfirmId)){
+                        $transact->setSuccess("Retirada efetuada com sucesso!");
+                    }else{
+                        $transact->setError("[1] Erro ao documentar transação, porém foi efetuada com sucesso.");
+                    }
+                }else{
+                    $transact->setError("[1] Erro ao iniciar a transação, tente novamente.");
+                }
+            }else{
+                $transact->setError("Saldo não suficiente!");
+            }            
+        }else{
+            $transact->setError("Falha na autenticação!");
+        }
+    }
+
+    public function deposit(AccountTransactions $transact){
+        $confirmRequester = \src\app\services\Database::validateLoggedPassword($transact->transactConfirmId, $transact->transactConfirmPassword);
+        if(!empty($confirmRequester)){
+            $senderNewBalance = floatval($confirmRequester['balance']) + $transact->transactValue;
+
+            if(\src\app\services\Database::doTransact($transact->transactConfirmId, $senderNewBalance)){
+                if(\src\app\services\Database::saveTransactHistory('Depósito', +$transact->transactValue, $transact->transactIp, $transact->transactConfirmId)){
+                    $transact->setSuccess("Depósito efetuado com sucesso!");
+                }else{
+                    $transact->setError("[1] Erro ao documentar transação, porém foi efetuada com sucesso.");
+                }
+            }else{
+                $transact->setError("[1] Erro ao iniciar a transação, tente novamente.");
+            }            
         }else{
             $transact->setError("Falha na autenticação!");
         }
