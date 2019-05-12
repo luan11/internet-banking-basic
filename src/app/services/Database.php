@@ -20,7 +20,7 @@ abstract class Database{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
 			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-			$verifyLoggedUser = $connection->prepare('SELECT firstName_ibbUsers, lastName_ibbUsers, balance_ibbUsers FROM ibb_users WHERE id_ibbUsers = :loggedUserId');
+			$verifyLoggedUser = $connection->prepare('SELECT firstName_ibbUsers, lastName_ibbUsers, balance_ibbUsers, role_ibbUsers FROM ibb_users WHERE id_ibbUsers = :loggedUserId');
 			$verifyLoggedUser->bindParam(':loggedUserId', $loggedUserId);
 			$verifyLoggedUser->execute();
 
@@ -48,7 +48,7 @@ abstract class Database{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
 			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-			$userLogin = $connection->prepare('SELECT id_ibbUsers, password_ibbUsers FROM ibb_users WHERE account_ibbUsers = :userAccount');
+			$userLogin = $connection->prepare('SELECT id_ibbUsers, password_ibbUsers FROM ibb_users WHERE BINARY account_ibbUsers = :userAccount');
 			$userLogin->bindParam(':userAccount', $userAccount);
 			$userLogin->execute();
 
@@ -172,7 +172,7 @@ abstract class Database{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
 			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-			$validateReceiver = $connection->prepare('SELECT balance_ibbUsers, id_ibbUsers FROM ibb_users WHERE account_ibbUsers = :accountNumber');
+			$validateReceiver = $connection->prepare('SELECT balance_ibbUsers, id_ibbUsers FROM ibb_users WHERE BINARY account_ibbUsers = :accountNumber');
 			$validateReceiver->bindParam(':accountNumber', $accountNumber);
 			$validateReceiver->execute();
 
@@ -203,14 +203,12 @@ abstract class Database{
 			$transact->bindParam(':userId', $userId);
 			$transact->execute();
 
-			$return = true;
+			return true;
 		}catch(\PDOException $e){
-			$return = false;
+			throw new \Exception("Erro ao efetuar a transação", 1);
 		}
 
 		$connection = null;
-
-		return $return;
 	}
 
 	/**
@@ -233,15 +231,13 @@ abstract class Database{
 			$saveTransact->bindParam(':transactIp', $ip);
 			$saveTransact->bindParam(':transactUserId', $userId);
 			$saveTransact->execute();
-
-			$return = true;
+			
+			return true;
 		}catch(\PDOException $e){
-			$return = false;
+			throw new \Exception("Error ao salvar a transação no histórico", 2);
 		}
 
 		$connection = null;
-
-		return $return;
 	}
 
 }

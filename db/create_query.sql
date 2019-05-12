@@ -23,3 +23,6 @@ select * from ibb_users;
 select ibb_users.id_ibbUsers, ibb_transacts.action_ibbTransacts, ibb_transacts.date_ibbTransacts, ibb_transacts.value_ibbTransacts, ibb_transacts.ip_ibbTransacts
 from ibb_transacts 
 inner join ibb_users on ibb_transacts.userId_ibbTransacts = 1 order by ibb_transacts.date_ibbTransacts desc;
+
+ALTER TABLE ibb_users
+ADD COLUMN role_ibbUsers varchar(255) not null default 'user';

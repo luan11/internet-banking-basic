@@ -119,8 +119,8 @@ gulp.task('default', () => {
 
 gulp.task('init-compile', () => {
     createReadmeToDist();
-    es6plusCompile();
-    return sassCompile();
+    sassCompile();
+    return es6plusCompile();
 });
 
 gulp.task('dist', gulp.series('minify-html', 'move-scripts', 'move-others-folders'));

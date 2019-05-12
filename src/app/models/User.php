@@ -52,7 +52,8 @@ abstract class User {
 					case 'ALTER_VIEW_CONTENT':
 						return array(
 							'name' => $confirmUserLogged->firstName_ibbUsers.' '.$confirmUserLogged->lastName_ibbUsers,
-							'balance' => \src\app\helpers\Utils::formatMoney($confirmUserLogged->balance_ibbUsers)
+							'balance' => \src\app\helpers\Utils::formatMoney($confirmUserLogged->balance_ibbUsers),
+							'role' => $confirmUserLogged->role_ibbUsers
 						);
 					break;
 					case 'REDIRECT':

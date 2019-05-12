@@ -5,9 +5,8 @@ require_once('src/app/config.php');
 
 abstract class View {
 
-	protected $pageTitle;
-	protected $viewContent;
-	protected $viewMessages = array();
+	protected $pageTitle, $viewContent, $viewMessages = array(), 
+	$viewMenuLogged = '<li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel"><i class="fas fa-exchange-alt"></i> Transferir</a></li><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel/retirar"><i class="fas fa-hand-holding-usd"></i> Retirar</a></li><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel/depositar"><i class="fas fa-coins"></i> Depositar</a></li><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel/historico"><i class="fas fa-receipt"></i> Histórico de Ações</a></li>';
 	private const acceptableMessageTypes = array('error', 'info', 'warning', 'success');
 
 	/**
@@ -27,11 +26,15 @@ abstract class View {
 			break;
 
 			case 'logged':
-				$head .= '<ul class="navbar-nav mr-auto"><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel"><i class="fas fa-exchange-alt"></i> Transferir</a></li><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel/retirar"><i class="fas fa-hand-holding-usd"></i> Retirar</a></li><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel/depositar"><i class="fas fa-coins"></i> Depositar</a></li><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel/historico"><i class="fas fa-receipt"></i> Histórico de Ações</a></li></ul><ul class="navbar-nav"><li class="nav-item"><p class="navbar-text mb-0 mr-3"><span class="badge badge-success">SALDO <i>'.$loggedUserBalance.'</i></span></p></li><li class="nav-item"><p class="navbar-text text-light mb-0 mr-4"><span class="badge badge-info"><i class="fas fa-user-circle"></i> BEM-VINDO(A), '.$loggedUserName.'</span></p></li><li class="nav-item"><a class="btn btn-danger mr-2" href="'.SYS_DEFAULT_URI.'/painel/sair">Encerrar sessão</a></li></ul></nav></header>';
+				$head .= '<ul class="navbar-nav mr-auto">'.$this->viewMenuLogged.'</ul><ul class="navbar-nav"><li class="nav-item"><p class="navbar-text mb-0 mr-3"><span class="badge badge-success">SALDO <i>'.$loggedUserBalance.'</i></span></p></li><li class="nav-item"><p class="navbar-text text-light mb-0 mr-4"><span class="badge badge-info"><i class="fas fa-user-circle"></i> BEM-VINDO(A), '.$loggedUserName.'</span></p></li><li class="nav-item"><a class="btn btn-danger mr-2" href="'.SYS_DEFAULT_URI.'/painel/sair">Encerrar sessão</a></li></ul></nav></header>';
 			break;
 		}
 
 		return $head;
+	}
+
+	public function setItemOnViewMenuLogged($itemName, $itemIcon, $itemUrl){
+		$this->viewMenuLogged .= '<li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.$itemUrl.'"><i class="'.$itemIcon.'"></i> '.$itemName.'</a></li>';
 	}
 
 	/**

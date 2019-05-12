@@ -25,6 +25,9 @@ class ViewsController {
 
 				$userIsLogged = \src\app\models\User::userIsLoggedIn();
 				if(!empty($userIsLogged)){
+					if($userIsLogged['role'] === 'admin'){
+						$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
+					}
 					echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
 				}else{					
 					echo $render->generateView();
@@ -106,6 +109,9 @@ class ViewsController {
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();
 							if(!empty($userIsLogged)){
+								if($userIsLogged['role'] === 'admin'){
+									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
+								}
 								echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
 							}else{					
 								header('Location: '.SYS_DEFAULT_URI.'/login');
@@ -138,6 +144,9 @@ class ViewsController {
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();
 							if(!empty($userIsLogged)){
+								if($userIsLogged['role'] === 'admin'){
+									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
+								}
 								echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
 							}else{					
 								header('Location: '.SYS_DEFAULT_URI.'/login');
@@ -150,6 +159,9 @@ class ViewsController {
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();
 							if(!empty($userIsLogged)){
+								if($userIsLogged['role'] === 'admin'){
+									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
+								}
 								echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
 							}else{					
 								header('Location: '.SYS_DEFAULT_URI.'/login');
@@ -169,6 +181,9 @@ class ViewsController {
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();
 							if(!empty($userIsLogged)){
+								if($userIsLogged['role'] === 'admin'){
+									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
+								}
 								echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
 							}else{					
 								header('Location: '.SYS_DEFAULT_URI.'/login');
@@ -201,6 +216,9 @@ class ViewsController {
 					
 					$userIsLogged = \src\app\models\User::userIsLoggedIn();
 					if(!empty($userIsLogged)){
+						if($userIsLogged['role'] === 'admin'){
+							$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
+						}
 						echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
 					}else{					
 						header('Location: '.SYS_DEFAULT_URI.'/login');
@@ -214,6 +232,9 @@ class ViewsController {
 				$render->setViewMessage("<b>404</b><br>Página não encontrada =(", "warning");
 				$userIsLogged = \src\app\models\User::userIsLoggedIn();
 				if(!empty($userIsLogged)){
+					if($userIsLogged['role'] === 'admin'){
+						$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
+					}
 					echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
 				}else{					
 					echo $render->generateView();
