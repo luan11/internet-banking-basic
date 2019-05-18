@@ -5,7 +5,7 @@ require_once('src/app/config.php');
 
 abstract class View {
 
-	protected $pageTitle, $viewContent, $viewMessages = array(), 
+	protected $pageTitle, $viewContent, $viewMessages = array(), $viewScripts = array(),
 	$viewMenuLogged = '<li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel"><i class="fas fa-exchange-alt"></i> Transferir</a></li><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel/retirar"><i class="fas fa-hand-holding-usd"></i> Retirar</a></li><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel/depositar"><i class="fas fa-coins"></i> Depositar</a></li><li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.'/painel/historico"><i class="fas fa-receipt"></i> Histórico de Ações</a></li>';
 	private const acceptableMessageTypes = array('error', 'info', 'warning', 'success');
 
@@ -17,7 +17,7 @@ abstract class View {
 	 * @param string $loggedUserBalance
 	 * @return void
 	 */
-	protected function header($headerType, $loggedUserName, $loggedUserBalance){
+	private function header($headerType, $loggedUserName, $loggedUserBalance){
 		$head = '<!DOCTYPE html><html lang="pt-br"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>'. SYS_PAGES_PREFIX.' | '.$this->pageTitle .'</title><link rel="stylesheet" href="'.SYS_DEFAULT_URI.'/assets/css/style.css"></head><body><header class="ibb-header"><nav class="navbar navbar-expand navbar-dark bg-dark justify-content-between"><a href="'.SYS_DEFAULT_URI.'" class="navbar-brand ml-2"><img src="'.SYS_DEFAULT_URI.'/assets/images/logo_white.png" width="85px" class="d-inline-block align-top img-fluid" alt="LuanDEV Logo"></a>';
 
 		switch($headerType){
@@ -33,6 +33,33 @@ abstract class View {
 		return $head;
 	}
 
+	/**
+	 * Adiciona um script a view
+	 *
+	 * @param string $scriptWay
+	 * @return void
+	 */
+	public function setScriptOnView($scriptWay){
+		array_push($this->viewScripts, '<script src="'.SYS_DEFAULT_URI.$scriptWay.'"></script>');
+	}
+
+	/**
+	 * Obtém todos os scripts da view
+	 *
+	 * @return void
+	 */
+	private function getViewScripts(){
+		return join('', $this->viewScripts);
+	}
+
+	/**
+	 * Insere um novo item ao final do menu
+	 *
+	 * @param string $itemName
+	 * @param string $itemIcon
+	 * @param string $itemUrl
+	 * @return void
+	 */
 	public function setItemOnViewMenuLogged($itemName, $itemIcon, $itemUrl){
 		$this->viewMenuLogged .= '<li class="nav-item"><a class="nav-link" href="'.SYS_DEFAULT_URI.$itemUrl.'"><i class="'.$itemIcon.'"></i> '.$itemName.'</a></li>';
 	}
@@ -42,8 +69,18 @@ abstract class View {
 	 *
 	 * @return void
 	 */
-	protected function footer(){
-		return '<footer class="bg-dark py-2"><div class="container"><p class="text-center text-light mb-0">Todos direitos reservados 2019 &copy; LuanDEV.</p></div></footer>';
+	private function footer(){
+		return '<footer class="bg-dark py-2"><div class="container"><p class="text-center text-light mb-0">Todos direitos reservados 2019 &copy; LuanDEV.</p></div></footer>'.$this->getViewScripts();
+	}
+
+	/**
+	 * Insere o conteúdo para renderização na view
+	 *
+	 * @param string $viewContent
+	 * @return void
+	 */
+	public function setViewContent($viewContent){
+		$this->viewContent = $viewContent;
 	}
 
 	/**
@@ -51,7 +88,7 @@ abstract class View {
 	 *
 	 * @return void
 	 */
-	protected function body(){
+	private function body(){
 		$bodyContent = '';
 
 		if(!empty($this->viewMessages)){

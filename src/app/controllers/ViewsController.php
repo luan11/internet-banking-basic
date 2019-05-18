@@ -14,6 +14,7 @@ require_once('src/app/models/User.php');
 require_once('src/app/models/RegisterUser.php');
 require_once('src/app/models/LoginUser.php');
 require_once('src/app/models/AccountTransactions.php');
+require_once('src/app/models/AdminManagement.php');
 
 class ViewsController {
 
@@ -173,6 +174,57 @@ class ViewsController {
 							\src\app\models\User::logout();
 							header('Location: '.SYS_DEFAULT_URI);
 							exit;
+						break;
+
+						case 'gerenciar':												
+							$userIsLogged = \src\app\models\User::userIsLoggedIn();
+							if(!empty($userIsLogged)){
+								if($userIsLogged['role'] === 'admin'){	
+									$render = new \src\app\views\IndexView("Gerenciar");			
+									$adminManage = new \src\app\models\AdminManagement();
+									
+									if(isset($_POST['formAdmin_admin'])){
+										$accsNum = isset($_POST['formAdmin_accsNum']) ? $_POST['formAdmin_accsNum'] : '';
+										$accsBalance = isset($_POST['formAdmin_accsBalance']) ? $_POST['formAdmin_accsBalance'] : '';
+										$accsDelete = isset($_POST['formAdmin_accsDelete']) ? $_POST['formAdmin_accsDelete'] : '';
+										$accsId = isset($_POST['formAdmin_accsId']) ? $_POST['formAdmin_accsId'] : '';
+
+										$adminManage->saveManagement($_POST['formAdmin_admin'], $accsNum, $accsBalance, $accsDelete, $accsId);
+
+										if(!empty($adminManage->getErrors())){
+											for($i = 0; $i < count($adminManage->getErrors()); $i++){
+												$render->setViewMessage($adminManage->getErrors()[$i]);
+											}
+										}
+				
+										if(!empty($adminManage->getSuccess())){
+											for($i = 0; $i < count($adminManage->getSuccess()); $i++){
+												$render->setViewMessage($adminManage->getSuccess()[$i], 'success');
+											}
+										}
+									}
+
+									$adminManage = new \src\app\models\AdminManagement();
+
+									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
+
+									if(!empty($adminManage->getAdminManagementViewContent())){
+										$render->setScriptOnView('/assets/js/bundle.min.js');
+										$render->setViewContent($adminManage->getAdminManagementViewContent());
+									}else{										
+										$render->setViewMessage('Algo deu errado no carregamento e/ou não existe nenhum usuário no sistema.', 'info');
+										$render->setViewContent('');
+									}
+								}else{
+									$render = new \src\app\views\IndexView("Ops...");
+									$render->setViewMessage("Você não tem permissão para acessar essa página...", "info");
+									$render->setViewContent('');
+								}
+								echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
+							}else{					
+								header('Location: '.SYS_DEFAULT_URI.'/login');
+								exit;
+							}
 						break;
 
 						default:

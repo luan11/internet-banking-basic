@@ -240,4 +240,77 @@ abstract class Database{
 		$connection = null;
 	}
 
+	/**
+	 * Pega os usuários para o Admin fazer o gerenciamento
+	 *
+	 * @param string $roleName
+	 * @return void
+	 */
+	public static function getUsersForAdminManagement($roleName = 'admin'){
+		try{
+			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
+			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+			$usersForManagement = $connection->prepare('SELECT id_ibbUsers, firstName_ibbUsers, lastName_ibbUsers, account_ibbUsers, balance_ibbUsers FROM ibb_users WHERE role_ibbUsers != :roleName');
+			$usersForManagement->bindParam(':roleName', $roleName);
+			$usersForManagement->execute();
+
+			$return = $usersForManagement->fetchAll(\PDO::FETCH_CLASS);
+		}catch(\PDOException $e){
+			$return = false;
+		}
+
+		$connection = null;
+
+		return $return;
+	}
+
+	/**
+	 * Remove um usuário da base de dados
+	 *
+	 * @param int $userId
+	 * @return void
+	 */
+	public static function deleteUser($userId){
+		try{
+			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
+			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+			$userForRemove = $connection->prepare('DELETE FROM ibb_users WHERE id_ibbUsers = :userId');
+			$userForRemove->bindParam(':userId', $userId);
+			$userForRemove->execute();
+
+			return true;
+		}catch(\PDOException $e){
+			return false;
+		}
+	}
+
+	/**
+	 * Faz a atualização do número de conta e saldo do usuário
+	 *
+	 * @param string $accNum
+	 * @param float $accBalance
+	 * @param int $userId
+	 * @return void
+	 */
+	public static function updateAccountByAdminManagement($accNum, $accBalance, $userId){
+		try{
+			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
+			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+			$updateAccount = $connection->prepare('UPDATE ibb_users SET account_ibbUsers = :accountNumber, balance_ibbUsers = :balanceValue WHERE id_ibbUsers = :userId');
+			$updateAccount->bindParam(':accountNumber', $accNum);
+			$updateAccount->bindParam(':balanceValue', $accBalance);
+			$updateAccount->bindParam(':userId', $userId);
+			$updateAccount->execute();
+
+			return true;
+		}catch(\PDOException $e){
+			throw new \Exception("Erro ao efetuar a atualização", 3);
+		}
+
+		$connection = null;
+	}
+
 }
