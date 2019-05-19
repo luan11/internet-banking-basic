@@ -26,3 +26,5 @@ inner join ibb_users on ibb_transacts.userId_ibbTransacts = 1 order by ibb_trans
 
 ALTER TABLE ibb_users
 ADD COLUMN role_ibbUsers varchar(255) not null default 'user';
+
+select * from ibb_transacts;

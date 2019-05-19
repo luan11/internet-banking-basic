@@ -276,6 +276,10 @@ abstract class Database{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
 			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
+			$userForRemoveHistory = $connection->prepare('DELETE FROM ibb_transacts WHERE userId_ibbTransacts = :userId');
+			$userForRemoveHistory->bindParam(':userId', $userId);
+			$userForRemoveHistory->execute();
+
 			$userForRemove = $connection->prepare('DELETE FROM ibb_users WHERE id_ibbUsers = :userId');
 			$userForRemove->bindParam(':userId', $userId);
 			$userForRemove->execute();
