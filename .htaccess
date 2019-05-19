@@ -1,3 +1,5 @@
+Options All -Indexes
+
 #SYS START 
 <IfModule mod_rewrite.c> 
 RewriteEngine On 
