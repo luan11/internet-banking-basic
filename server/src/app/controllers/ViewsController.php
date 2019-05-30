@@ -26,7 +26,7 @@ class ViewsController {
 
 				$userIsLogged = \src\app\models\User::userIsLoggedIn();
 				if(!empty($userIsLogged)){
-					if($userIsLogged['role'] === 'admin'){
+					if($userIsLogged['role'] === 'admin' || $userIsLogged['role'] === 'subadmin'){
 						$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
 					}
 					echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
@@ -110,7 +110,7 @@ class ViewsController {
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();
 							if(!empty($userIsLogged)){
-								if($userIsLogged['role'] === 'admin'){
+								if($userIsLogged['role'] === 'admin' || $userIsLogged['role'] === 'subadmin'){
 									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
 								}
 								echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
@@ -145,7 +145,7 @@ class ViewsController {
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();
 							if(!empty($userIsLogged)){
-								if($userIsLogged['role'] === 'admin'){
+								if($userIsLogged['role'] === 'admin' || $userIsLogged['role'] === 'subadmin'){
 									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
 								}
 								echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
@@ -160,7 +160,7 @@ class ViewsController {
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();
 							if(!empty($userIsLogged)){
-								if($userIsLogged['role'] === 'admin'){
+								if($userIsLogged['role'] === 'admin' || $userIsLogged['role'] === 'subadmin'){
 									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
 								}
 								echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
@@ -185,11 +185,13 @@ class ViewsController {
 									
 									if(isset($_POST['formAdmin_admin'])){
 										$accsNum = isset($_POST['formAdmin_accsNum']) ? $_POST['formAdmin_accsNum'] : '';
+										$accsPassword = isset($_POST['formAdmin_accsPass']) ? $_POST['formAdmin_accsPass'] : '';
+										$accsRole = isset($_POST['formAdmin_accsRole']) ? $_POST['formAdmin_accsRole'] : '';
 										$accsBalance = isset($_POST['formAdmin_accsBalance']) ? $_POST['formAdmin_accsBalance'] : '';
 										$accsDelete = isset($_POST['formAdmin_accsDelete']) ? $_POST['formAdmin_accsDelete'] : '';
 										$accsId = isset($_POST['formAdmin_accsId']) ? $_POST['formAdmin_accsId'] : '';
 
-										$adminManage->saveManagement($_POST['formAdmin_admin'], $accsNum, $accsBalance, $accsDelete, $accsId);
+										$adminManage->saveManagement($_POST['formAdmin_admin'], $accsNum, $accsPassword, $accsRole, $accsBalance, $accsDelete, $accsId);
 
 										if(!empty($adminManage->getErrors())){
 											for($i = 0; $i < count($adminManage->getErrors()); $i++){
@@ -215,6 +217,11 @@ class ViewsController {
 										$render->setViewMessage('Algo deu errado no carregamento e/ou não existe nenhum usuário no sistema.', 'info');
 										$render->setViewContent('');
 									}
+								}else if($userIsLogged['role'] === 'subadmin'){
+									$render = new \src\app\views\IndexView("Gerenciamento em breve!");
+									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
+									$render->setViewMessage("Em breve você terá acesso ao painel gerenciavél de <i>subadmin</i>...", "info");
+									$render->setViewContent('');
 								}else{
 									$render = new \src\app\views\IndexView("Ops...");
 									$render->setViewMessage("Você não tem permissão para acessar essa página...", "info");
@@ -233,7 +240,7 @@ class ViewsController {
 							
 							$userIsLogged = \src\app\models\User::userIsLoggedIn();
 							if(!empty($userIsLogged)){
-								if($userIsLogged['role'] === 'admin'){
+								if($userIsLogged['role'] === 'admin' || $userIsLogged['role'] === 'subadmin'){
 									$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
 								}
 								echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
@@ -268,7 +275,7 @@ class ViewsController {
 					
 					$userIsLogged = \src\app\models\User::userIsLoggedIn();
 					if(!empty($userIsLogged)){
-						if($userIsLogged['role'] === 'admin'){
+						if($userIsLogged['role'] === 'admin' || $userIsLogged['role'] === 'subadmin'){
 							$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
 						}
 						echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
@@ -284,7 +291,7 @@ class ViewsController {
 				$render->setViewMessage("<b>404</b><br>Página não encontrada =(", "warning");
 				$userIsLogged = \src\app\models\User::userIsLoggedIn();
 				if(!empty($userIsLogged)){
-					if($userIsLogged['role'] === 'admin'){
+					if($userIsLogged['role'] === 'admin' || $userIsLogged['role'] === 'subadmin'){
 						$render->setItemOnViewMenuLogged('Gerenciar', 'fas fa-cog', '/painel/gerenciar');
 					}
 					echo $render->generateView('logged', $userIsLogged['name'], $userIsLogged['balance']);
