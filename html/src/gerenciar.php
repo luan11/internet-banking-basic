@@ -50,12 +50,14 @@
 					<table class="table table-striped table-bordered">
 						<thead class="text-center">
 							<tr>
-								<th scope="col">ID</th>
-								<th scope="col">ALTERAR?</th>
-								<th scope="col">TITULAR DA CONTA</th>
-								<th scope="col">Nº DE CONTA</th>
-								<th scope="col">SALDO DA CONTA</th>
-								<th scope="col">EXCLUIR?</th>
+								<th scope="col"><i class="fas fa-hashtag text-info"></i> ID</th>
+								<th scope="col"><i class="fas fa-pencil-alt text-warning"></i> ALTERAR?</th>
+								<th scope="col"><i class="fas fa-user text-primary"></i> NOME</th>
+								<th scope="col"><i class="fas fa-user-circle text-primary"></i> CONTA</th>
+								<th scope="col"><i class="fas fa-key text-primary"></i> SENHA</th>
+								<th scope="col"><i class="fas fa-cogs text-primary"></i> FUNÇÃO</th>
+								<th scope="col"><i class="fas fa-dollar-sign text-success"></i> SALDO</th>
+								<th scope="col"><i class="fas fa-times text-danger"></i> EXCLUIR?</th>
 							</tr>
 						</thead>
 						<tbody class="text-center">
@@ -64,6 +66,15 @@
 								<td><input type="checkbox" class="acc-edit"></td>
 								<td><p class="text-muted my-0">Jose Silva</p></td>
 								<td><input type="text" class="accs-num form-control" maxlength="10"></td>
+								<td>
+									<input type="password" class="accs-new-password form-control" maxlength="6">
+								</td>
+								<td>
+									<select class="accs-role form-control">
+										<option value="subadmin">Subadmin</option>
+										<option value="user">Usuário</option>
+									</select>
+								</td>
 								<td><input type="text" class="accs-balance form-control"></td>
 								<td><input type="checkbox" class="accs-delete" value="ID"></td>
 								<input type="hidden" class="accs-id">
@@ -73,6 +84,15 @@
 								<td><input type="checkbox" class="acc-edit"></td>
 								<td><p class="text-muted my-0">Jose Silva</p></td>
 								<td><input type="text" class="accs-num form-control" maxlength="10"></td>
+								<td>
+									<input type="password" class="accs-new-password form-control" maxlength="6">
+								</td>
+								<td>
+									<select class="accs-role form-control">
+										<option value="subadmin">Subadmin</option>
+										<option value="user">Usuário</option>
+									</select>
+								</td>
 								<td><input type="text" class="accs-balance form-control"></td>
 								<td><input type="checkbox" class="accs-delete" value="ID"></td>
 								<input type="hidden" class="accs-id">
@@ -82,6 +102,15 @@
 								<td><input type="checkbox" class="acc-edit"></td>
 								<td><p class="text-muted my-0">Jose Silva</p></td>
 								<td><input type="text" class="accs-num form-control" maxlength="10"></td>
+								<td>
+									<input type="password" class="accs-new-password form-control" maxlength="6">
+								</td>
+								<td>
+									<select class="accs-role form-control">
+										<option value="subadmin">Subadmin</option>
+										<option value="user">Usuário</option>
+									</select>
+								</td>
 								<td><input type="text" class="accs-balance form-control"></td>
 								<td><input type="checkbox" class="accs-delete" value="ID"></td>
 								<input type="hidden" class="accs-id">

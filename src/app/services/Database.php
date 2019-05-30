@@ -202,8 +202,6 @@ abstract class Database{
 			$transact->bindParam(':balanceValue', $value);
 			$transact->bindParam(':userId', $userId);
 			$transact->execute();
-
-			return true;
 		}catch(\PDOException $e){
 			throw new \Exception("Erro ao efetuar a transação", 1);
 		}
@@ -231,8 +229,6 @@ abstract class Database{
 			$saveTransact->bindParam(':transactIp', $ip);
 			$saveTransact->bindParam(':transactUserId', $userId);
 			$saveTransact->execute();
-			
-			return true;
 		}catch(\PDOException $e){
 			throw new \Exception("Error ao salvar a transação no histórico", 2);
 		}
@@ -251,7 +247,7 @@ abstract class Database{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
 			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-			$usersForManagement = $connection->prepare('SELECT id_ibbUsers, firstName_ibbUsers, lastName_ibbUsers, account_ibbUsers, balance_ibbUsers FROM ibb_users WHERE role_ibbUsers != :roleName');
+			$usersForManagement = $connection->prepare('SELECT id_ibbUsers, firstName_ibbUsers, lastName_ibbUsers, account_ibbUsers, balance_ibbUsers, role_ibbUsers FROM ibb_users WHERE role_ibbUsers != :roleName');
 			$usersForManagement->bindParam(':roleName', $roleName);
 			$usersForManagement->execute();
 
@@ -295,23 +291,46 @@ abstract class Database{
 	 *
 	 * @param string $accNum
 	 * @param float $accBalance
+	 * @param string $accRole
 	 * @param int $userId
 	 * @return void
 	 */
-	public static function updateAccountByAdminManagement($accNum, $accBalance, $userId){
+	public static function updateAccountByAdminManagement($accNum, $accBalance, $accRole, $userId){
 		try{
 			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
 			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-			$updateAccount = $connection->prepare('UPDATE ibb_users SET account_ibbUsers = :accountNumber, balance_ibbUsers = :balanceValue WHERE id_ibbUsers = :userId');
+			$updateAccount = $connection->prepare('UPDATE ibb_users SET account_ibbUsers = :accountNumber, balance_ibbUsers = :balanceValue, role_ibbUsers = :userRole WHERE id_ibbUsers = :userId');
 			$updateAccount->bindParam(':accountNumber', $accNum);
 			$updateAccount->bindParam(':balanceValue', $accBalance);
+			$updateAccount->bindParam(':userRole', $accRole);
 			$updateAccount->bindParam(':userId', $userId);
 			$updateAccount->execute();
-
-			return true;
 		}catch(\PDOException $e){
 			throw new \Exception("Erro ao efetuar a atualização", 3);
+		}
+
+		$connection = null;
+	}
+
+	/**
+	 * Faz a atualização da senha do usuário
+	 *
+	 * @param string $accPass
+	 * @param int $userId
+	 * @return void
+	 */
+	public static function updateAccountPasswordByAdminManagement($accPass, $userId){
+		try{
+			$connection = new \PDO(self::hostAndDbName, self::dbUser, self::dbUserPassword);
+			$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+			$updateAccount = $connection->prepare('UPDATE ibb_users SET password_ibbUsers = :accountPassword WHERE id_ibbUsers = :userId');
+			$updateAccount->bindParam(':accountPassword', $accPass);
+			$updateAccount->bindParam(':userId', $userId);
+			$updateAccount->execute();
+		}catch(\PDOException $e){
+			throw new \Exception("Erro ao efetuar a atualização de senha", 4);
 		}
 
 		$connection = null;
